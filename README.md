@@ -12,6 +12,14 @@ General-purpose citizen assistant with a tested offline HTML demo, plus Node/Fir
 - Production setup: see `RC7-README.md` and `render.yaml`. **Do not deploy secrets into GitHub** or incur paid Render Redis costs without reviewing pricing.
 - The current repo's license is **UNLICENSED**. Do not assume reuse or redistribution rights.
 
+## Citizen beta: verified public access (opt-in)
+
+The frontend supports registration and email verification. In the default `ACCESS_POLICY=allowlist` mode, only explicitly listed `ALLOWED_UIDS` can use the AI routes. An ordinary newly registered user is **not** automatically granted access.
+
+To enable a controlled public beta, explicitly set `ACCESS_POLICY=verified` on the server. This admits any **Firebase-authenticated, email-verified user** from the configured Firebase project; the token is still checked for revocation and all existing Redis-backed pre-auth, per-user, global and expensive-mode quotas remain active. The public mode is not set automatically by the Render Blueprint. Do not use a wildcard UID, expose credentials, or enable public access without provider-budget monitoring and abuse review. Even with a daily request ceiling, **usage can incur charges**; a request limit is not a currency spending limit.
+
+The repository is currently **public** on GitHub; only placeholders belong in `.env.example`. No production credentials should be committed. Firebase and Pollinations secrets must be configured securely with the hosting provider. Real provider inference and Firebase integration have not been exercised by CI fixtures.
+
 ## Security status
 
 Firebase-backed user authorization and quota controls are included in the source, but live Firebase, Redis, provider inference and complete integration tests have not been independently verified. Use a private repo until you complete an audit and configure credentials.
