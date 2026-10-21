@@ -1,0 +1,13 @@
+PASS No demo login in production frontend
+PASS Firebase SDK sign-in flow (mocked API)
+PASS User and model XSS payloads remain text
+PASS Language and opted-in context reach backend
+PASS 390px viewport without horizontal overflow
+PASS Downloaded ZIP contains generated source files
+PASS PNG preview and real blob download
+PASS Desktop layout without horizontal overflow
+PASS Logout clears chat and ignores delayed responses
+PASS Logout clears visible saved context
+PASS No browser runtime errors: 
+PASS CSP enforced without violations
+Firebase and provider responses mocked; browser, frontend bundle, server HTTP routing and downloads are real.

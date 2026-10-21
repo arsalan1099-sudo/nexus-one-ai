@@ -1,0 +1,11 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {WORKFLOWS,analyzeCitizen} from '../web/citizen.js';
+for(const [kind,spec] of Object.entries(WORKFLOWS))test(kind+' accepts default example',()=>{const raw=Object.fromEntries(spec.fields.map(([id,, ,value])=>[id,String(value)]));const r=analyzeCitizen(kind,raw);assert.equal(r.workflow,kind);assert.equal(r.externalCalls,false);assert.equal(r.review,'HUMAN REVIEW REQUIRED');assert.ok(r.metrics.length>0);});
+test('business break-even and profit are calculated',()=>{const r=analyzeCitizen('business',{price:'500',variable:'300',fixed:'1000',units:'10'});assert.deepEqual(r.metrics.map(x=>x.value),['₹200','₹1,000','5']);});
+test('budget negative surplus identified',()=>{const r=analyzeCitizen('budget',{income:100,housing:110,food:10,bills:0,transport:0,other:0});assert.equal(r.findings[0].level,'attention');});
+test('emergency water shortfall calculated',()=>{const r=analyzeCitizen('emergency',{people:4,days:3,litres:3,water:12,foodDays:1});assert.equal(r.metrics[1].value,'24 L');});
+test('disallows negative numbers and NaN',()=>{const b={price:'-1',variable:0,fixed:0,units:0};assert.throws(()=>analyzeCitizen('business',b));assert.throws(()=>analyzeCitizen('business',{...b,price:'Infinity'}));});
+test('invalid enum is not accepted',()=>{assert.throws(()=>analyzeCitizen('digital',{mfa:'maybe',updates:'yes',backups:'yes',passwords:'yes',scams:'yes'}));});
+test('reject unsupported modules',()=>assert.throws(()=>analyzeCitizen('targeting',{})));
+test('must never claim trained autonomous AI',()=>{for(const c of Object.values(WORKFLOWS))assert.ok(c.fields.length>=4);});

@@ -1,0 +1,41 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> nexus-asi-elite@1.0.0-rc.2 check
+> npm run build && npm test
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> nexus-asi-elite@1.0.0-rc.2 build
+> node scripts/build.js
+
+Built self-contained dist/index.html; backend supplies CSP hashes.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> nexus-asi-elite@1.0.0-rc.2 test
+> node --test test/*.test.js
+
+✔ real Redis atomically limits concurrent requests and persists counters across connections (42.211587ms)
+✔ real Redis stalled write command fails within the configured timeout (3509.375722ms)
+✔ protected APIs reject missing or revoked tokens (42.01876ms)
+✔ unverified and unapproved users cannot spend provider credits (7.423753ms)
+✔ foreign/missing Origin and spoofed forwarding headers do not grant access (6.815986ms)
+✔ JSON size and schema constraints reject abuse (13.677481ms)
+✔ valid requests succeed without interpreting response HTML (4.870944ms)
+✔ rate limits and unavailable Redis fail closed (7.510834ms)
+✔ billing quota applies after authorization (3.974622ms)
+✔ provider details and keys never reach client errors (3.818016ms)
+✔ production headers, no CDN and no source/config file exposure (11.207848ms)
+✔ readiness reflects Redis failure (4.766797ms)
+✔ ZIP schema rejects traversal, duplicate paths and path conflicts (1.321412ms)
+✔ provider uses fixed destination and server-side bearer credentials (4.048945ms)
+✔ unsafe provider project output and fake image rejected (1.171656ms)
+✔ upstream response bytes are bounded (0.267202ms)
+✔ startup refuses missing keys, emulator mode, wildcard access and non-HTTPS production (6.208511ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3757.88548

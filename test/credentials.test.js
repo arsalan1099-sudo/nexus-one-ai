@@ -1,0 +1,11 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {parseServiceAccount,readAdminServiceAccount} from '../src/credentials.js';
+const fake={type:'service_account',project_id:'test-project',client_email:'test@test-project.iam.gserviceaccount.com',private_key:'-----BEGIN PRIVATE KEY-----\nEXAMPLE\n-----END PRIVATE KEY-----\n'};
+const encoded=Buffer.from(JSON.stringify(fake)).toString('base64');
+test('admin credentials decode from a private host env var',async()=>{const r=await readAdminServiceAccount({FIREBASE_ADMIN_JSON_B64:encoded,FIREBASE_PROJECT_ID:'test-project'});assert.equal(r.project_id,'test-project');});
+test('credentials from another Firebase project are rejected',async()=>{await assert.rejects(readAdminServiceAccount({FIREBASE_ADMIN_JSON_B64:encoded,FIREBASE_PROJECT_ID:'other'}),/different Firebase project/);});
+test('malformed base64 credentials are rejected',async()=>{await assert.rejects(readAdminServiceAccount({FIREBASE_ADMIN_JSON_B64:encoded+'#',FIREBASE_PROJECT_ID:'test-project'}),/encoding|project/);});
+test('conflicting Admin credential methods are rejected',async()=>{await assert.rejects(readAdminServiceAccount({FIREBASE_ADMIN_JSON_B64:encoded,GOOGLE_APPLICATION_CREDENTIALS:'/fake',FIREBASE_PROJECT_ID:'test-project'}),/one Firebase/);});
+test('workload identity can be separately verified',async()=>assert.equal(await readAdminServiceAccount({FIREBASE_PROJECT_ID:'test-project'}),null));
+test('service account must contain private key and email',()=>assert.throws(()=>parseServiceAccount(JSON.stringify({...fake,client_email:''}),'test-project'),/incomplete/));

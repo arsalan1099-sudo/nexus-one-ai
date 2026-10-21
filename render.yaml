@@ -1,0 +1,57 @@
+# Infrastructure template only. Applying this Blueprint may create billable services.
+# Review current Render pricing and approve costs before deployment.
+services:
+  - type: web
+    name: nexus-one-citizen
+    runtime: docker
+    region: singapore
+    plan: free
+    autoDeployTrigger: checksPass
+    healthCheckPath: /readyz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: TRUST_PROXY_HOPS
+        value: '0'
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: nexus-one-quotas
+          property: connectionString
+      - key: FIREBASE_PROJECT_ID
+        sync: false
+      - key: FIREBASE_WEB_API_KEY
+        sync: false
+      - key: FIREBASE_APP_ID
+        sync: false
+      - key: FIREBASE_AUTH_DOMAIN
+        sync: false
+      - key: FIREBASE_ADMIN_JSON_B64
+        sync: false
+      - key: POLLINATIONS_API_KEY
+        sync: false
+      - key: ALLOWED_UIDS
+        sync: false
+      - key: TEXT_MODEL
+        value: openai/gpt-5.4-nano
+      - key: IMAGE_MODEL
+        value: black-forest-labs/flux.1-schnell
+      - key: DAILY_REQUEST_LIMIT
+        value: '100'
+      - key: USER_MINUTE_LIMIT
+        value: '5'
+      - key: IMAGE_DAILY_LIMIT
+        value: '10'
+      - key: PROJECT_DAILY_LIMIT
+        value: '10'
+      - key: VISION_MODEL
+        value: openai/gpt-5.4-nano
+      - key: VISION_DAILY_LIMIT
+        value: '10'
+  - type: keyvalue
+    name: nexus-one-quotas
+    plan: starter
+    region: singapore
+    ipAllowList: []
+    maxmemoryPolicy: noeviction
+    persistenceMode: journal-snapshot

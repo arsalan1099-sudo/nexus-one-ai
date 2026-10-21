@@ -1,0 +1,22 @@
+PASS RC3 manifest / lockfile version match
+PASS Static HTML build contains local bundled JavaScript
+PASS Static HTML does not load external scripts
+PASS Built HTML uses RC3 theme
+PASS Template uses the same RC3 styling
+PASS Mobile media query exists
+PASS Reduced-motion support exists
+PASS App uses explicit trusted proxy hop settings
+PASS Pre-auth quota keys off the resolved client IP
+PASS Pre-auth quota does not blindly accept X-Forwarded-For
+PASS Config defaults to zero trusted proxies
+PASS Additional cost-sensitive usage limits configured
+PASS Server enforces image and project quotas
+PASS Server checks revoked Firebase tokens
+PASS Server requires verified approved account
+PASS Application enforces API origin
+PASS Server security headers include CORP and COOP
+PASS Provider credentials remain server-side
+PASS Container drops privileges and remains read-only
+PASS CI contains real test and browser steps
+PASS Syntax parse all source/test/script JavaScript files
+TOTAL 21 dependency-free checks passed
