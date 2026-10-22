@@ -4,7 +4,9 @@ import { readFile } from 'node:fs/promises';
 import vm from 'node:vm';
 
 const html = await readFile(new URL('../dist/citizen-demo.html', import.meta.url), 'utf8');
-const script = html.match(/<script>([\\s\\S]*?)<\\/script>/i)?.[1];
+const scriptStart = html.indexOf('<script>');
+const scriptEnd = html.indexOf('</script>', scriptStart);
+const script = scriptStart >= 0 && scriptEnd > scriptStart ? html.slice(scriptStart + 8, scriptEnd) : null;
 assert.ok(script, 'embedded application script exists');
 const cut = script.indexOf('function mountCitizenWorkspace');
 assert.ok(cut > 0, 'pure analysis layer exists before UI mount');
