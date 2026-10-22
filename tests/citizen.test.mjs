@@ -58,6 +58,6 @@ test('does not claim emergency or document eligibility is verified', () => {
 
 test('source clearly labels offline-only scope and has no dead AI portal link', () => {
   assert.match(html, /RC7/);
-  assert.match(html, /AI chat is not included/);
+  assert.match(html, /not an AI chatbot/i);
   assert.equal(html.includes('href="/ai"'), false);
 });
