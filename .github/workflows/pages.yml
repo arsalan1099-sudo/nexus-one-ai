@@ -1,0 +1,54 @@
+name: Deploy free offline Citizen Edition to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'dist/citizen-demo.html'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Prepare static offline app
+        run: |
+          mkdir -p pages-artifact
+          node --input-type=module <<'NODE'
+          import { readFile, writeFile } from 'node:fs/promises';
+          let html = await readFile('dist/citizen-demo.html', 'utf8');
+          html = html.replace(
+            '<a href="/ai" id="onlineAiLink">Advanced AI portal ↗</a>',
+            '<span>Advanced AI chat is not part of this free offline edition.</span>'
+          );
+          if (!html.includes('mountCitizenWorkspace();')) throw new Error('Citizen workspace bundle missing');
+          if (html.includes('href="/ai"')) throw new Error('Backend-only link must not be published on static Pages');
+          await writeFile('pages-artifact/index.html', html);
+          NODE
+          cp README.md pages-artifact/PROJECT-README.txt
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: pages-artifact
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-24.04
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
