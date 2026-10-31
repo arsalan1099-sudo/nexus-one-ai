@@ -11,7 +11,7 @@
     "test": "node --test test/*.test.js",
     "check": "npm run build && npm test",
     "audit": "npm audit --omit=dev",
-    "test:browser": "node scripts/browser-test.js",
+    "test:browser": "node scripts/browser-test.js && node scripts/browser-homepage-test.js",
     "browser:install": "playwright install chromium",
     "preflight": "node --env-file-if-exists=.env scripts/preflight.js",
     "verify:offline": "node scripts/rc4-verify.mjs",
@@ -40,3 +40,4 @@
     "node": ">=24 <25"
   }
 }
+
