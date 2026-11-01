@@ -1,5 +1,6 @@
-# Infrastructure template only. Applying this Blueprint may create billable services.
-# Review current Render pricing and approve costs before deployment.
+# Free preview infrastructure. Both compute plans are explicitly free.
+# In-memory quota counters reset when Redis restarts; this is not persistent billing control.
+# AI provider usage has separate pricing; configure provider-side limits before adding a key.
 services:
   - type: web
     name: nexus-one-citizen
@@ -52,8 +53,9 @@ services:
         value: '10'
   - type: keyvalue
     name: nexus-one-quotas
-    plan: starter
+    plan: free
     region: singapore
     ipAllowList: []
     maxmemoryPolicy: noeviction
-    persistenceMode: journal-snapshot
+    persistenceMode: 'off'
+

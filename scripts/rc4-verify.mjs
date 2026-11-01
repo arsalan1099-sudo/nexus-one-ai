@@ -12,7 +12,7 @@ const app=read('src/app.js'),cfg=read('src/config.js'),web=read('web/index.templ
 const pkg=JSON.parse(read('package.json')),lock=JSON.parse(read('package-lock.json'));
 check('RC4 manifest / lockfile version match',()=>assert.equal(pkg.version,lock.version));
 check('Credential parser and Render origin resolver shipped',()=>{assert.match(read('src/server.js'),/readAdminServiceAccount/);assert.match(read('src/config.js'),/resolvePublicOrigin/);});
-check('Render Blueprint wires private persistent quota store',()=>{const y=read('render.yaml');assert.match(y,/type: keyvalue/);assert.match(y,/persistenceMode: journal-snapshot/);assert.match(y,/property: connectionString/);assert.match(y,/sync: false/);});
+check('Render Blueprint wires private free preview quota store',()=>{const y=read('render.yaml');assert.match(y,/type: keyvalue/);assert.match(y,/persistenceMode: 'off'/);assert.equal((y.match(/plan: free/g)||[]).length,2);assert.doesNotMatch(y,/plan: (?:starter|standard|pro)/);assert.match(y,/property: connectionString/);assert.match(y,/sync: false/);});
 check('Static HTML build contains local bundled JavaScript',()=>assert.match(built,/<script>[^]*?<\/script>/));
 check('Static HTML does not load external scripts',()=>assert.doesNotMatch(built,/<script\s+src\s*=/i));
 check('Built HTML uses RC3 theme',()=>assert.ok(built.includes('RC3 Elite visual refinement')));
@@ -35,3 +35,4 @@ check('CI contains real test and browser steps',()=>{assert.match(read('.github/
 for(const dir of ['src','web','scripts','test'])for(const f of readdirSync(new URL(dir+'/',root)).filter(x=>/\.(?:m?js)$/.test(x))){const abs=new URL(dir+'/'+f,root);execFileSync(process.execPath,['--check',abs.pathname]);}
 results.push('PASS Syntax parse all source/test/script JavaScript files');
 console.log(results.join('\n'));console.log('TOTAL '+results.length+' dependency-free checks passed');
+
